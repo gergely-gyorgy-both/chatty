@@ -1,0 +1,68 @@
+@import "../bootstrap_defines.scss";
+@import "../src/assets/css/style.css";
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+
+.feature {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    width: 3rem;
+    font-size: 1.5rem;
+}
+
+.text-primary-lighter {
+    color: $primary-lighter;
+}
+
+
+.APPLICATION_CONTENT {
+    font-family: "serif";
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    min-width: 400px;
+}
+
+.allowTextSelection {
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.hideElement {
+    visibility: hidden !important;
+}
+
+.invalid-feedback {
+    display: block;
+}
+
+#main {
+    transition: all 0.1s !important;
+}
+
+@media (max-width: 1199px) {
+    .toggle-sidebar {
+
+        #main {
+            ::after {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(209, 209, 209, 0.1);
+                z-index: 500;
+            }
+
+        }
+
+        margin: 0;
+        height: 100%;
+        overflow: hidden
+    }
+}

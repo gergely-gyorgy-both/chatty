@@ -1,0 +1,37 @@
+@use '../../../bootstrap_defines';
+
+.nav-link:not(:hover):not(.active) {
+    color: bootstrap_defines.$primary !important;
+    background: #fff !important;
+}
+
+.sidebar-nav {
+    .nav-link {
+        &.active {
+            color: bootstrap_defines.$dark;
+        }
+
+        color: bootstrap_defines.$primary;
+
+        &:hover,
+        &:hover i {
+            color: bootstrap_defines.$dark;
+        }
+
+        i {
+            color: bootstrap_defines.$primary;
+
+        }
+    }
+}
+
+.sidebar {
+    --transition: all 0.1s;
+    transition: var(--transition);
+    /* ...other styles */
+    --pos-x: 0;
+    --pos-y: 0;
+    transform: translate(calc(var(--pos-x) * 1px),
+            calc(var(--pos-y) * 1px));
+    will-change: transform;
+}

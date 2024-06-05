@@ -1,0 +1,54 @@
+<aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link" routerLinkActive="active" routerLink="/" [routerLinkActiveOptions]="{exact: true}">
+                <i class="bi bi-grid"></i>
+                <span>Element 1</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" routerLink="/products" routerLinkActive="active" style="pointer-events: none;
+            cursor: default;">
+                <i class="bi bi-grid"></i>
+                <span>Element 2</span>
+            </a>
+            <ul id="forms-nav" class="nav-content collapse show">
+                <li>
+                    <a routerLinkActive="active" routerLink="/products/fridge">
+                        <i class="bi bi-circle"></i>
+                        <span>Sub 1</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLinkActive="active" routerLink="/products/freezer">
+                        <i class="bi bi-circle"></i>
+                        <span>Sub 2</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLinkActive="active" routerLink="/products/storage">
+                        <i class="bi bi-circle"></i>
+                        <span>Sub 3</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" routerLinkActive="active" routerLink="/shopping-list">
+                <i class="bi bi-grid"></i>
+                <span>Element 3</span>
+            </a>
+        </li>
+
+        <!-- <li class="nav-item">
+            <a class="nav-link" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active" routerLink="/">
+                <i class="bi bi-grid"></i>
+                <span>Overview</span>
+            </a>
+        </li> -->
+
+
+    </ul>
+</aside>

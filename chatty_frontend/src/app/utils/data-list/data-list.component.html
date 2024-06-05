@@ -1,0 +1,48 @@
+<ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="listState.hasListEntries; else noListEntries">
+        <div class="list-group" (clickOutside)="listClickOutside.emit()">
+
+            <ng-container *ngFor="let column of columns">
+                <!-- HEADERS -->
+            </ng-container>
+
+            <ng-container
+                *ngFor="let rowData of data; let rowIdx = index; let firstRow = first; let lastRow = last; trackBy:rowTrackBy">
+                <ng-container *ngIf="{isHovered: false} as rowProperties">
+                    <div [attr.rowIdx]="rowIdx" (mouseEnter)="rowProperties.isHovered = true"
+                        (mouseleave)="rowProperties.isHovered = false"
+                        (click)="rowAttributes(rowData, rowIdx).isClickable ? rowClickAction.emit({data: rowData, index: rowIdx}) : undefined"
+                        [class.list-group-item-action]="false" class="list-group-item" aria-current="true">
+
+                        <!-- NO RENDER, just inject the templates -->
+                        <ng-container [ngTemplateOutlet]="rowTemplateRef"
+                            [ngTemplateOutletContext]="{$implicit: rowData, rowProperties: {}, rowIdx}">
+                        </ng-container>
+
+                        <div class="d-flex w-100 justify-content-between">
+                            <ng-container
+                                *ngFor="let columnTemplateRef of getColumnTemplatesForRow(rowIdx); let columnIdx = index; let firstColumn = first; let lastColumn = last;">
+                                <!-- TODO: columns -->
+                                <ng-container *ngTemplateOutlet="columnTemplateRef"></ng-container>
+                            </ng-container>
+
+                        </div>
+
+
+                        <ng-container *ngFor="let extraContentTemplateRef of getExtraContentTemplatesForRow(rowIdx)">
+                            <ng-container *ngTemplateOutlet="extraContentTemplateRef"></ng-container>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+        </div>
+
+
+    </ng-container>
+
+    <ng-template #noListEntries>
+        <ng-content select="ng-container[cpSlot=emptyState]"></ng-content>
+    </ng-template>
+
+</ng-container>
