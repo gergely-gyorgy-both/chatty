@@ -1,1 +1,39 @@
-<p>login works!</p>
+<div class="row h-100 d-flex justify-content-center align-content-center m-0">
+    <div class="col-lg-6 col-11">
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center">Welcome to Chatty!<br>Choose a username and dive into chatting.
+                </h5>
+
+
+                <div *ngIf="{isSubmittedOnce: false} as data">
+                    <div class="row">
+                        <label for="inputText" class="col-sm-2 col-form-label">Username</label>
+                        <div class="col-sm-10">
+                            <input [formControl]="usernameFormControl"
+                                [class.is-invalid]="data.isSubmittedOnce && usernameFormControl.errors" type="text"
+                                class="form-control">
+                            <div class="form-text">Minimum 2, maximum 20 characters.</div>
+                            <div *ngIf="data.isSubmittedOnce && usernameFormControl.errors" class="invalid-feedback">
+                                Username is not valid.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col d-flex justify-content-end">
+                            <button type="button" class="btn btn-primary"
+                                (click)="data.isSubmittedOnce = true; login();">Start chatting</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

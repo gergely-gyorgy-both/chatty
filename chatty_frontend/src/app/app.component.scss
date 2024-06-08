@@ -16,6 +16,13 @@
     z-index: 2;
 }
 
-.nav-link {
-    cursor: pointer;
+.notification {
+    position: fixed;
+    right: 1em;
+    top: 1em;
+    z-index: 2147483647;
+
+    &:has(*>.alert.hidden) {
+        visibility: hidden;
+    }
 }
