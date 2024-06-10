@@ -1,5 +1,11 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { AppService } from '../../services/app.service';
+import { ChatService } from '../../services/chat.service';
+import { FormControl, Validators } from '@angular/forms';
+import { jwtDecode } from 'jwt-decode';
+import { CookieService } from 'ngx-cookie-service';
+import { delay, map, of, switchMap } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -14,7 +20,24 @@ export class NavbarComponent implements AfterViewInit {
 
     private initialTransition!: string;
 
-    constructor(private readonly appService: AppService) {
+    public privateChatUsernameFormControl = new FormControl('', Validators.compose([Validators.required]));
+
+    constructor(
+        private readonly appService: AppService,
+        public readonly chatService: ChatService,
+        private readonly cookieService: CookieService,
+        private readonly authService: AuthService
+    ) {
+        this.privateChatUsernameFormControl.addAsyncValidators((control) => {
+            return of(control).pipe(
+                delay(1000),
+                switchMap(control => this.authService.checkUsername(control.value)),
+                map(doesUserExist => doesUserExist ? null : { userNotFound: true })
+            );
+        })
+        this.privateChatUsernameFormControl.valueChanges.subscribe(() => {
+            console.log(this.privateChatUsernameFormControl.errors);
+        })
     }
 
     public ngAfterViewInit(): void {
@@ -63,5 +86,16 @@ export class NavbarComponent implements AfterViewInit {
                 sidebar.style.setProperty("--transition", this.initialTransition);
             }
         })
+    }
+
+    public get currentUsername(): string {
+        return jwtDecode<{ username: string }>(this.cookieService.get('refresh')).username
+    }
+
+    public addPrivateChatRoom(): void {
+        if (this.privateChatUsernameFormControl.valid && this.privateChatUsernameFormControl.value) {
+            this.chatService.addPrivateChatRoom(this.privateChatUsernameFormControl.value);
+            this.privateChatUsernameFormControl.reset();
+        }
     }
 }

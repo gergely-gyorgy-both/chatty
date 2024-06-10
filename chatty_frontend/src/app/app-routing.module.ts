@@ -6,6 +6,8 @@ import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { AuthGuard, UserStatus } from '../services/auth.guard';
 import { CommonChatComponent } from './chat/common-chat/common-chat.component';
+import { RefreshTokenResolver } from '../services/refresh-token-resolver.service';
+import { PrivateChatComponent } from './chat/private-chat/private-chat.component';
 
 
 const routes: Routes = [
@@ -15,11 +17,21 @@ const routes: Routes = [
     },
     {
         path: 'chat', component: MainComponent,
+        resolve: {
+            _refreshToken: RefreshTokenResolver
+        },
         canActivate: [AuthGuard(UserStatus.LOGGED_IN)],
         children: [
             {
                 path: '',
                 component: CommonChatComponent
+            },
+            {
+                path: ':roomId',
+                component: PrivateChatComponent,
+                data: {
+                    shouldReuseRoute: false
+                }
             }
         ]
     },
@@ -33,7 +45,7 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
     providers: [
-        // { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }
+        { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }
     ]
 })
 export class AppRoutingModule { }

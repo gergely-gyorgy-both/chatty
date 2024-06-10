@@ -1,5 +1,5 @@
 <!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
+<header id="header" class="header sticky-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
         <i class="bi bi-list toggle-sidebar-btn" (click)="appService.toggleSidebar()"></i>
@@ -51,7 +51,7 @@
 <app-navbar></app-navbar>
 
 
-<main id="main" class="main">
+<main id="main" class="main h-100">
 
     <router-outlet></router-outlet>
 

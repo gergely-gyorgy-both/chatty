@@ -1,53 +1,52 @@
 <aside id="sidebar" class="sidebar">
-    <ul class="sidebar-nav" id="sidebar-nav">
-        <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" routerLink="/" [routerLinkActiveOptions]="{exact: true}">
-                <i class="bi bi-grid"></i>
-                <span>Element 1</span>
-            </a>
-        </li>
+    <ul class="sidebar-nav h-100" id="sidebar-nav">
+        <div>
+            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" routerLink="/chat"
+                    [routerLinkActiveOptions]="{exact: true}">
+                    <i class="bi bi-grid"></i>
+                    <span>General Chat</span>
+                </a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/products" routerLinkActive="active" style="pointer-events: none;
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/products" routerLinkActive="active" style="pointer-events: none;
             cursor: default;">
-                <i class="bi bi-grid"></i>
-                <span>Element 2</span>
-            </a>
-            <ul id="forms-nav" class="nav-content collapse show">
-                <li>
-                    <a routerLinkActive="active" routerLink="/products/fridge">
-                        <i class="bi bi-circle"></i>
-                        <span>Sub 1</span>
-                    </a>
-                </li>
-                <li>
-                    <a routerLinkActive="active" routerLink="/products/freezer">
-                        <i class="bi bi-circle"></i>
-                        <span>Sub 2</span>
-                    </a>
-                </li>
-                <li>
-                    <a routerLinkActive="active" routerLink="/products/storage">
-                        <i class="bi bi-circle"></i>
-                        <span>Sub 3</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+                    <i class="bi bi-grid"></i>
+                    <span>Private chats</span>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse show">
+                    <ng-container *ngIf="(chatService.getRoomsForCurrentUser$() | async) as rooms">
+                        <li *ngFor="let room of rooms">
+                            <a routerLinkActive="active" [routerLink]="'/chat/' + room.id">
+                                <i class="bi bi-circle"></i>
+                                <span>{{
+                                    currentUsername === room.username_one ? room.username_two :
+                                    room.username_one}}</span>
+                            </a>
+                        </li>
+                    </ng-container>
 
-        <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" routerLink="/shopping-list">
-                <i class="bi bi-grid"></i>
-                <span>Element 3</span>
-            </a>
-        </li>
-
-        <!-- <li class="nav-item">
-            <a class="nav-link" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active" routerLink="/">
-                <i class="bi bi-grid"></i>
-                <span>Overview</span>
-            </a>
-        </li> -->
+                </ul>
+            </li>
+        </div>
+        <div>
+            <li class="nav-item">
+                <div class="d-flex gap-3">
+                    <input [formControl]="privateChatUsernameFormControl" type="text" class="form-control">
+                    <button [disabled]="!privateChatUsernameFormControl.valid" (click)="addPrivateChatRoom()"
+                        type="button" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                </div>
+                <div class="form-text">
+                    Type a username to start a private chat
+                </div>
+                <div *ngIf="privateChatUsernameFormControl.hasError('userNotFound')" class="invalid-feedback">
+                    User is not found.
+                </div>
+            </li>
+        </div>
 
 
     </ul>

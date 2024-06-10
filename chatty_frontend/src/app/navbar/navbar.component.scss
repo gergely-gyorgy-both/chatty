@@ -6,6 +6,12 @@
 }
 
 .sidebar-nav {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
     .nav-link {
         &.active {
             color: bootstrap_defines.$dark;

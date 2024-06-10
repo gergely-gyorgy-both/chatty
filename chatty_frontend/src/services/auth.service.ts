@@ -62,6 +62,10 @@ export class AuthService {
         );
     }
 
+    public checkUsername(username: string): Observable<boolean> {
+        return this.http.get<boolean>(`${environment.API_URL}/user/check-username`, { params: { username } });
+    }
+
     private setCookie(data: { key: string, value: string, expiry: Date }): void {
         this.cookieService.set(data.key, data.value, {
             expires: data.expiry,

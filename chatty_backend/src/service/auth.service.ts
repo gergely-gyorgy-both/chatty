@@ -14,4 +14,8 @@ export class AuthService {
     createRefreshToken(username: string): Observable<string> {
         return from(this.jwtService.signAsync({ username }, { expiresIn: '7d' }));
     }
+
+    verifyToken(token: string): Observable<any> {
+        return from(this.jwtService.verifyAsync(token));
+    }
 }

@@ -21,6 +21,7 @@ import { JWTInterceptorService } from '../services/jwt-interceptor.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CommonChatComponent } from './chat/common-chat/common-chat.component';
 import { ChatComponent } from './chat/chat.component';
+import { PrivateChatComponent } from './chat/private-chat/private-chat.component';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { ChatComponent } from './chat/chat.component';
         NgTemplateStrictTypeDirective,
         CommonChatComponent,
         ChatComponent,
+        PrivateChatComponent,
     ],
     imports: [
         BrowserModule,
