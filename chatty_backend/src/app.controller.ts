@@ -73,7 +73,7 @@ export class AppController {
     @Delete('user/logout')
     logout(@Req() request: Request): Observable<void> {
         const username = this.jwtService.decode<{ username }>(extractTokenFromHeader(request)).username;
-
+        this.userService.deleteUser(username);
         return from(this.userService.deleteUser(username));
     }
 }

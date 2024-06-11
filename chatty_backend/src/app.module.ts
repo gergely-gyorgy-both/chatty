@@ -28,8 +28,7 @@ import { UserService } from './service/user.service';
         TypeOrmModule.forFeature([User, ChatRoom, ChatMessage]),
         JwtModule.register({
             global: true,
-            secret: JWTSecret, // TODO: provide this as a running argument
-            // signOptions: { expiresIn: '60s' },
+            secret: JWTSecret // TODO: provide this as a running argument
         }),
     ],
     controllers: [AppController],

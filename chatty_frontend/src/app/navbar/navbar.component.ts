@@ -34,10 +34,7 @@ export class NavbarComponent implements AfterViewInit {
                 switchMap(control => this.authService.checkUsername(control.value)),
                 map(doesUserExist => doesUserExist ? null : { userNotFound: true })
             );
-        })
-        this.privateChatUsernameFormControl.valueChanges.subscribe(() => {
-            console.log(this.privateChatUsernameFormControl.errors);
-        })
+        });
     }
 
     public ngAfterViewInit(): void {

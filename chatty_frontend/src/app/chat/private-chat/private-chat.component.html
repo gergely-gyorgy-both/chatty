@@ -1,1 +1,2 @@
-<app-chat [messages]="messages" (sendMessageEvent)="sendMessage($event)"></app-chat>
+<app-chat [messages]="messages" [hasOlderMessages]="hasOlderMessages" (sendMessageEvent)="sendMessage($event)"
+    (loadOlderMessagesEvent)="getNMessagesBeforeTimestamp($event)"></app-chat>

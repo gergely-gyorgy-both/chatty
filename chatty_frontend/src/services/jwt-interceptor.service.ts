@@ -19,7 +19,6 @@ export class JWTInterceptorService {
         if (req.headers.get('Skip-Token-Refresh')) {
             shouldRefreshToken = false;
         }
-        console.log(req, shouldRefreshToken);
 
         req = req.clone({
             setHeaders: {
@@ -28,9 +27,6 @@ export class JWTInterceptorService {
                 'Authorization': `Bearer ${this.cookieService.get('auth')}`,
             },
         });
-        console.log(this.cookieService.get('auth'));
-        console.log(this.cookieService.get('refresh'));
-        console.log(req);
         return (
             iif(
                 () => shouldRefreshToken,
@@ -41,21 +37,9 @@ export class JWTInterceptorService {
             )
         ).pipe(
             switchMap((_) => {
-                console.log(_);
                 return next.handle(req);
             })
         );
 
-        // next.handle(req).pipe(
-        //     // tap(response => {
-        //     //     if (response.type === HttpEventType.Response) {
-        //     //         const authHeader = response.headers.get('Authorization');
-        //     //         console.log(response);
-        //     //         if (authHeader) {
-        //     //             this.setAUTHCookie(authHeader);
-        //     //         }
-        //     //     }
-        //     // })
-        // );
     }
 }

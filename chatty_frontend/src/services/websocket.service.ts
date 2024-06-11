@@ -1,6 +1,6 @@
 //web-socket.service.ts
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { environment } from '../environments/environment';
 import { iif, Observable, of } from 'rxjs';
@@ -19,14 +19,10 @@ export interface ChatRoom {
     username_two: string;
 }
 
-@Injectable({
-    providedIn: 'root',
-})
-export class WebsocketService {
+@Injectable()
+export class WebsocketService implements OnDestroy {
     private webSocket: Socket;
     constructor(private readonly cookieService: CookieService, private readonly authService: AuthService) {
-        const token = this.cookieService.get('auth');
-        console.log(token);
         this.webSocket = new Socket({
             url: `${environment.API_URL}`,
             options: {
@@ -36,42 +32,48 @@ export class WebsocketService {
         this.connectSocket();
     }
 
-    // this method is used to start connection/handhshake of socket with server
-    connectSocket() {
-        // this.webSocket.emit('connect', { token: this.cookieService.get('auth') });
-        this.webSocket.connect();
+    public ngOnDestroy(): void {
+        this.disconnectSocket();
     }
 
-    // this method is used to send message to server
-    sendChatMessage(channel: ChatMessageChannel, message: string, roomId?: string) {
+
+    public sendChatMessage(channel: ChatMessageChannel, message: string, roomId?: string): void {
         this.webSocket.emit(channel, { message, roomId });
     }
 
-    // this method is used to get response from server
-    receiveChatMessage$(channel: ChatMessageChannel): Observable<Message> {
+
+    public receiveChatMessage$(channel: ChatMessageChannel): Observable<Message> {
         return this.webSocket.fromEvent<Message>(channel);
     }
 
-    // this method is used to get response from server
-    getRoomsForCurrentUser$(): Observable<ChatRoom[]> {
+    public getNChatMessagesBeforeTimestamp$(numberOfMessagesToRetrieve: number, timestamp: number, roomId?: string): Observable<Message[]> {
+        this.webSocket.emit('getNChatMessages', { numberOfMessagesToRetrieve, timestamp, roomId });
+        return this.webSocket.fromEvent<Message[]>('getNChatMessages');
+    }
 
+
+    public getRoomsForCurrentUser$(): Observable<ChatRoom[]> {
         return this.webSocket.fromEvent<ChatRoom[]>('roomDiscovery');
     }
 
-    createPrivateChatRoom(username: string): void {
+    public createPrivateChatRoom(username: string): void {
         this.webSocket.emit('createPrivateRoom', { username });
     }
 
-    // this method is used to end web socket connection
-    disconnectSocket() {
-        this.webSocket.disconnect();
-    }
-
-    triggerGetEvent(eventName: string): void {
+    public triggerGetEvent(eventName: string): void {
         this.webSocket.emit(eventName);
     }
 
-    joinRoom(roomId: string) {
+    public joinRoom(roomId: string): void {
         this.webSocket.emit('joinRoom', { roomId });
     }
+
+    private connectSocket(): void {
+        this.webSocket.connect();
+    }
+
+    private disconnectSocket() {
+        this.webSocket.disconnect();
+    }
+
 }

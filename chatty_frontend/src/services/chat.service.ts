@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ChatMessageChannel, ChatRoom, WebsocketService } from './websocket.service';
-import { Observable } from 'rxjs';
+import { first, Observable } from 'rxjs';
+
+export const DEFAULT_GET_N_MESSAGES_BEFORE_TIMESTAMP = 20;
 
 export interface Message {
     text: string;
     senderUsername: string;
+    dateMs: number;
     roomId?: string;
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+
+@Injectable()
 export class ChatService {
 
     constructor(private readonly websocketService: WebsocketService) {
@@ -23,6 +25,12 @@ export class ChatService {
 
     public receiveChatMessage$(channel: ChatMessageChannel): Observable<Message> {
         return this.websocketService.receiveChatMessage$(channel);
+    }
+
+    public getNChatMessagesBeforeTimestamp$(numberOfMessagesToRetrieve: number, timestamp: number, roomId?: string): Observable<Message[]> {
+        return this.websocketService.getNChatMessagesBeforeTimestamp$(numberOfMessagesToRetrieve, timestamp, roomId).pipe(
+            first()
+        );
     }
 
     public getRoomsForCurrentUser$(): Observable<ChatRoom[]> {

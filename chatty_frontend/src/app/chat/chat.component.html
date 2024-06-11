@@ -1,17 +1,23 @@
-<div class="h-100 d-flex flex-column gap-2">
-    <div *ngFor="let message of messages">
+<div class="messages d-flex flex-column gap-2" #messagesContainer>
+    <div *ngIf="messages.length && hasOlderMessages" class="d-flex justify-content-center">
+        <button type="button" class="btn btn-outline-primary" (click)="loadOlderMessages()">Load older
+            messages...</button>
+    </div>
+    <div #messagesElements *ngFor="let message of messages; let last = last; trackBy: messagesTrackBy">
         <div [ngClass]="isOwnMessage(message.senderUsername) ? 'right' : 'left'" class="col-6 msg p-3">
             <div>{{message.text}}</div>
-            <small *ngIf="!isOwnMessage(message.senderUsername)" class="fst-italic">{{message.senderUsername}}</small>
+            <small class="fst-italic">{{message.senderUsername}} |
+                {{getMessageTimestamp(message)}}</small>
         </div>
+        {{last ? setScrollHeight() : ''}}
     </div>
-    <div class="col d-flex">
-        <div class="w-100 align-content-end">
-            <div class="d-flex gap-3">
-                <input [formControl]="messageFormControl" type="text" class="form-control">
-                <button type="button" class="btn btn-primary" (click)="sendMessage()"><i
-                        class="bi bi-send"></i></button>
-            </div>
+</div>
+<div class="col messageInput">
+    <div class="w-100 align-content-end">
+        <div class="d-flex gap-3">
+            <input [formControl]="messageFormControl" (keydown.enter)="sendMessage()" type="text" class="form-control">
+            <button [disabled]="!messageFormControl.valid" type="button" class="btn btn-primary"
+                (click)="sendMessage()"><i class="bi bi-send"></i></button>
         </div>
     </div>
 </div>

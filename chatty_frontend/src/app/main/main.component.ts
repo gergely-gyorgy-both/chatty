@@ -4,12 +4,15 @@ import { jwtDecode } from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { WebsocketService } from '../../services/websocket.service';
+import { ChatService } from '../../services/chat.service';
 
 
 @Component({
     selector: 'app-main',
     templateUrl: './main.component.html',
-    styleUrl: './main.component.scss'
+    styleUrl: './main.component.scss',
+    providers: [WebsocketService, ChatService]
 })
 export class MainComponent {
 
