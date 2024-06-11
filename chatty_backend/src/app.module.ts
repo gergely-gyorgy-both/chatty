@@ -12,13 +12,16 @@ import { ChatRoom } from './entity/chatroom.entity';
 import { ChatService } from './service/chat.service';
 import { ChatMessage } from './entity/chat-message.entity';
 import { UserService } from './service/user.service';
+import { env } from 'environment';
+
+
 
 @Module({
     imports: [
         TypeOrmModule.forRoot({
             type: 'mysql',
-            host: 'localhost',
-            port: 3306,
+            host: env.DB_HOST,
+            port: env.DB_PORT,
             username: 'root',
             password: 'admin',
             database: 'chatty',
@@ -29,13 +32,14 @@ import { UserService } from './service/user.service';
         JwtModule.register({
             global: true,
             secret: JWTSecret // TODO: provide this as a running argument
-        }),
+        })
     ],
     controllers: [AppController],
     providers: [AppService, AuthService, ChatGateway, ChatService, UserService],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer): void {
+
         consumer.apply(AppLoggerMiddleware).forRoutes('*');
     }
 }

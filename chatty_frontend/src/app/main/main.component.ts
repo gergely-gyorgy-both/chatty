@@ -28,7 +28,10 @@ export class MainComponent {
     }
 
     public logout(): void {
-        this.authService.logout().subscribe(() => {
+        this.authService.logout().pipe(
+        ).subscribe(() => {
+            this.cookieService.delete('auth');
+            this.cookieService.delete('refresh');
             this.router.navigate(['/']);
         });
     }

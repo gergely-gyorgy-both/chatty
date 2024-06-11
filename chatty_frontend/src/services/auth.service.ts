@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, EMPTY, Observable, of, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { NotificationService } from './notification.service';
 import { NotificationSeverity } from '../models/AppNotification';
@@ -56,8 +56,6 @@ export class AuthService {
         return this.http.delete<void>(`${environment.API_URL}/user/logout`).pipe(
             tap(() => {
                 this.notificationService.createNotification({ text: 'Logout successful', severity: NotificationSeverity.OK });
-                this.cookieService.delete('auth');
-                this.cookieService.delete('refresh');
             })
         );
     }

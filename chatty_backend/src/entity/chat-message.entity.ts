@@ -11,7 +11,7 @@ export class ChatMessage {
     @JoinColumn({ name: 'username' })
     senderUser?: User;
 
-    @Column()
+    @Column({ type: 'text' })
     text: string;
 
     @Column({ type: 'bigint' })

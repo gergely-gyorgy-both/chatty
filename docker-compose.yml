@@ -1,27 +1,25 @@
-version: '3.5'
+version: '1.0'
 
 services:
   db:
     image: 'mysql:latest'
     ports:
-      - "3306:3306"
+      - "3305:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: chattydb
-      MYSQL_USER: chattyuser
-      MYSQL_PASSWORD: chattypassword
+      MYSQL_ROOT_PASSWORD: "admin"
+      MYSQL_DATABASE: "chatty"
     restart: always
     container_name: "chatty_db_1"
   nest:
-    build: ./chatty_backend/
+    build: ./chatty_backend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - "db"
     restart: always
     container_name: "chatty_nest_1"
   angular:
-    build: ./chatty_frontend/
+    build: ./chatty_frontend
     depends_on:
       - "nest"
     ports:

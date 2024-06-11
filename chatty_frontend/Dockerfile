@@ -7,4 +7,5 @@ COPY . /docker-app-build/
 RUN npm run build --prod
 
 FROM nginx:1.21.4-alpine
-COPY --from=build /docker-app-build/dist/chatty_frontend /usr/share/nginx/html
+COPY --from=build /docker-app-build/dist/chatty/browser /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf

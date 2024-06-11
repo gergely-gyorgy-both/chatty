@@ -14,11 +14,6 @@ import { UserService } from './service/user.service';
 export class AppController {
     constructor(private readonly userService: UserService, private jwtService: JwtService, private readonly authService: AuthService) { }
 
-    @Get('user/login')
-    isLoggedIn(@Param('username') username: string): boolean {
-        return true;
-    }
-
     @Get('user/check-username')
     doesUserExist(@Req() request: Request, @Query('username') username: string): Observable<boolean> {
 
@@ -30,7 +25,8 @@ export class AppController {
     // @UseGuards(AuthGuard)
     @Post('user/login')
     login(@Body() request: { username: string }): Observable<UserLoginResponse> {
-
+        Logger.log('Prod mode');
+        Logger.log(process.env.prod);
         const createUser$ = forkJoin([this.authService.createAccessToken(request.username), this.authService.createRefreshToken(request.username)]).pipe(
             mergeMap(([accessToken, refreshToken]) => from(this.userService.createUser(request.username, refreshToken)).pipe(
                 map(() => [accessToken, refreshToken])
@@ -73,7 +69,6 @@ export class AppController {
     @Delete('user/logout')
     logout(@Req() request: Request): Observable<void> {
         const username = this.jwtService.decode<{ username }>(extractTokenFromHeader(request)).username;
-        this.userService.deleteUser(username);
         return from(this.userService.deleteUser(username));
     }
 }

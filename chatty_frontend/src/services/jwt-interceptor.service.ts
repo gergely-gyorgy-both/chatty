@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpEventType, HttpHandler, HttpRequest } from "@angular/common/http";
+import { HttpEvent, HttpHandler, HttpRequest } from "@angular/common/http";
 import { iif, Observable, of } from "rxjs";
-import { finalize, switchMap, tap } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
 import { CookieService } from 'ngx-cookie-service';
-import { DateTime } from 'luxon';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -20,23 +19,21 @@ export class JWTInterceptorService {
             shouldRefreshToken = false;
         }
 
-        req = req.clone({
-            setHeaders: {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${this.cookieService.get('auth')}`,
-            },
-        });
         return (
             iif(
                 () => shouldRefreshToken,
-                this.authService.refreshToken$(this.cookieService.get('refresh')).pipe(
-
-                ),
+                this.authService.refreshToken$(this.cookieService.get('refresh')),
                 of(true)
             )
         ).pipe(
             switchMap((_) => {
+                req = req.clone({
+                    setHeaders: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${this.cookieService.get('auth')}`,
+                    },
+                });
                 return next.handle(req);
             })
         );
